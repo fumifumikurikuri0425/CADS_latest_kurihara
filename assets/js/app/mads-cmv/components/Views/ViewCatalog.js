@@ -28,6 +28,7 @@ import PieView from './Pie';
 import Scatter3DView from './Scatter3D';
 import GapMinderView from './GapMinder';
 import LineView from './Line';
+import XenonpyView from './XenonpyView';
 
 // Data Processing
 import ImageViewView from './ImageView';
@@ -57,12 +58,10 @@ import CustomView from './Custom';
 
 //-------------------------------------------------------------------------------------------------
 
-
 //-------------------------------------------------------------------------------------------------
 // The Catalog Config
 //-------------------------------------------------------------------------------------------------
 const config = [
-
   // VISUALIZATION CATEGORY
   //=======================
 
@@ -73,7 +72,7 @@ const config = [
     name: 'Table',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: TableView,
     settings: {
       columns: [],
@@ -94,7 +93,7 @@ const config = [
     name: 'Scatter',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: ScatterView,
     settings: {
       options: {
@@ -114,7 +113,7 @@ const config = [
     name: 'Bar',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: BarView,
     settings: {
       options: {
@@ -137,7 +136,7 @@ const config = [
     name: 'Pie',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: PieView,
     settings: {
       bins: 7,
@@ -147,7 +146,7 @@ const config = [
           width: 0,
           height: 0,
         },
-      }
+      },
     },
   },
   //------------------------------------------
@@ -159,10 +158,10 @@ const config = [
     name: 'Scatter3D',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: Scatter3DView,
     settings: {
-      method: "Manual",
+      method: 'Manual',
       options: {
         axisTitles: ['x', 'y', 'z'],
         marker: {
@@ -173,11 +172,11 @@ const config = [
         colorMap: 'Category20c',
         extent: { width: 450, height: 450 },
         camera: {
-          eye: {x: 1.25, y: 1.25, z: 1.25},
-          up: {x: 0, y: 0, z: 1},
-          center: {x: 0, y: 0, z: 0},
+          eye: { x: 1.25, y: 1.25, z: 1.25 },
+          up: { x: 0, y: 0, z: 1 },
+          center: { x: 0, y: 0, z: 0 },
         },
-      }
+      },
     },
   },
   //------------------------------------------
@@ -189,7 +188,7 @@ const config = [
     name: 'Line',
     category: 'Visualization',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: LineView,
     settings: {
       options: {
@@ -197,15 +196,35 @@ const config = [
           width: 700,
           height: 400,
         },
-        XAxisLabel: "",
-        YAxisLabel: "",
-        legendLabel: "",
+        XAxisLabel: '',
+        YAxisLabel: '',
+        legendLabel: '',
         colorMap: 'Category10',
       },
       mappings: {},
     },
   },
   //------------------------------------------
+
+  // Xenonpy - A Customizable Xenonpy View
+  //-----------------------------------------------
+  {
+    type: 'xenonpy',
+    name: 'Xenonpy',
+    category: 'Visualization',
+    version: 0.5,
+    devStage: 'Beta',
+    component: StatisticsView,
+    settings: {
+      featureColumns: [],
+      options: {
+        extent: {
+          width: 800,
+          height: 400,
+        },
+      },
+    },
+  },
 
   // GapMinder - A Hans Rosling Inspiration
   // COMMENTED OUT SINCE IT IS NOT YET FINISHED AT ALL
@@ -232,7 +251,6 @@ const config = [
   // },
   //------------------------------------------
 
-
   // DATA PROCESSING CATEGORY
   //=========================
 
@@ -243,28 +261,54 @@ const config = [
     name: 'ImageView',
     category: 'Data Processing',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: ImageViewView,
     customBtns: [
-      {name: 'saveImg', icon: 'save', text: 'Save Image'},
-      {name: 'annotateImg', icon: 'edit', text: 'Enable Annotate Image'},
-      {name: 'annotateBrushType', type: 'list', text: 'Pen or Eraser?', options: [{key: "Pen0", text:"Pen", value: 0}, {key: "Eraser1", text:"Eraser", value: 1}]},
-      {name: 'annotationColor', type: 'color', text: 'Annotation Color'},
-      {name: 'annotationSize', type: 'number', step: 1, defVal: 2, text: 'Annotation Brush Size'},
-      {name: 'annotationOpacity', type: 'number', step: 0.1, min: 0.1, max: 1.0, defVal: 1.0, text: 'Annotation Brush Opacity'},
-      {name: 'annotateImgReset', icon: 'trash', text: 'Reset All Annotations'},
+      { name: 'saveImg', icon: 'save', text: 'Save Image' },
+      { name: 'annotateImg', icon: 'edit', text: 'Enable Annotate Image' },
+      {
+        name: 'annotateBrushType',
+        type: 'list',
+        text: 'Pen or Eraser?',
+        options: [
+          { key: 'Pen0', text: 'Pen', value: 0 },
+          { key: 'Eraser1', text: 'Eraser', value: 1 },
+        ],
+      },
+      { name: 'annotationColor', type: 'color', text: 'Annotation Color' },
+      {
+        name: 'annotationSize',
+        type: 'number',
+        step: 1,
+        defVal: 2,
+        text: 'Annotation Brush Size',
+      },
+      {
+        name: 'annotationOpacity',
+        type: 'number',
+        step: 0.1,
+        min: 0.1,
+        max: 1.0,
+        defVal: 1.0,
+        text: 'Annotation Brush Opacity',
+      },
+      {
+        name: 'annotateImgReset',
+        icon: 'trash',
+        text: 'Reset All Annotations',
+      },
     ],
     settings: {
       options: {
-        title: "",
-        caption: "",
+        title: '',
+        caption: '',
         extent: {
           width: 400,
           height: 300,
         },
         border: {
-          color: "black",
-          style: "solid",
+          color: 'black',
+          style: 'solid',
           size: 2,
         },
         cssFilters: {
@@ -317,7 +361,6 @@ const config = [
   },
   //------------------------------------------
 
-
   // ANALYSIS CATEGORY
   //==================
 
@@ -328,7 +371,7 @@ const config = [
     name: 'Parallel Coordinates',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: ParCoordsView,
     settings: {
       axes: [],
@@ -346,7 +389,7 @@ const config = [
     name: 'Histogram',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: HistView,
     settings: {
       options: {
@@ -368,7 +411,7 @@ const config = [
     name: 'Feature Importance (RF)',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: RFFeatureView,
     settings: {
       featureColumns: [],
@@ -388,7 +431,7 @@ const config = [
     name: 'HeatMap',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: HeatMapView,
     settings: {
       options: {
@@ -397,7 +440,7 @@ const config = [
           width: 500,
           height: 400,
         },
-      }
+      },
     },
   },
   //------------------------------------------
@@ -409,14 +452,14 @@ const config = [
     name: 'PairwiseCorrelation',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: PairwiseCorrelationView,
     settings: {
       options: {
-        title: "Pairwise Correlation",
+        title: 'Pairwise Correlation',
         extent: { width: 600, height: 600 },
         maskEnabled: true,
-      }
+      },
     },
   },
   //------------------------------------------
@@ -428,12 +471,20 @@ const config = [
     name: 'NodeGraph',
     category: 'Analysis',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: NodeGraphView,
     customBtns: [
-      {name: 'toggleNodeResettling', icon: 'recycle', text: 'Toggle Node Pinning'},
-      {name: 'toggleNodeLabels', icon: 'square', text: 'Toggle Node Labels'},
-      {name: 'toggleLinkLabels', icon: 'connectdevelop', text: 'Toggle Link Labels'},
+      {
+        name: 'toggleNodeResettling',
+        icon: 'recycle',
+        text: 'Toggle Node Pinning',
+      },
+      { name: 'toggleNodeLabels', icon: 'square', text: 'Toggle Node Labels' },
+      {
+        name: 'toggleLinkLabels',
+        icon: 'connectdevelop',
+        text: 'Toggle Link Labels',
+      },
     ],
     settings: {
       options: {
@@ -444,8 +495,8 @@ const config = [
           width: 700,
           height: 600,
         },
-        bkgCol: "#ffffff",
-        txtCol: "#000000",
+        bkgCol: '#ffffff',
+        txtCol: '#000000',
       },
     },
   },
@@ -461,17 +512,17 @@ const config = [
     name: 'Regression',
     category: 'Machine Learning',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: RegressionView,
     settings: {
       method: 'Linear',
       methodArguments: {
         arg1: 0,
-        arg2: 0
+        arg2: 0,
       },
       featureColumns: [],
       targetColumn: '',
-      cvmethod: "TrainTestSplit",
+      cvmethod: 'TrainTestSplit',
       cvmethodArg: 0.2,
       mappings: {},
     },
@@ -485,13 +536,13 @@ const config = [
     name: 'Classification',
     category: 'Machine Learning',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: ClassificationView,
     settings: {
       method: 'RandomForest',
       methodArguments: {
         arg1: 0,
-        arg2: 100
+        arg2: 100,
       },
       featureColumns: [],
       targetColumn: '',
@@ -507,7 +558,7 @@ const config = [
     name: 'K-Means Clustering',
     category: 'Machine Learning',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: ClusteringView,
     settings: {
       method: 'KMeans',
@@ -528,7 +579,7 @@ const config = [
     name: 'Gaussian Process',
     category: 'Machine Learning',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: GaussianProcessView,
     settings: {
       featureColumns: [],
@@ -538,11 +589,11 @@ const config = [
         colorMap: 'Category20c',
         extent: { width: 450, height: 450 },
         camera: {
-          eye: {x: 1.25, y: 1.25, z: 1.25},
-          up: {x: 0, y: 0, z: 1},
-          center: {x: 0, y: 0, z: 0},
+          eye: { x: 1.25, y: 1.25, z: 1.25 },
+          up: { x: 0, y: 0, z: 1 },
+          center: { x: 0, y: 0, z: 0 },
         },
-      }
+      },
     },
   },
   //------------------------------------------
@@ -554,7 +605,7 @@ const config = [
     name: 'Statistics',
     category: 'Machine Learning',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: StatisticsView,
     settings: {
       featureColumns: [],
@@ -603,7 +654,6 @@ const config = [
   // },
   //------------------------------------------
 
-
   // STATIC DATA VISUAL SUPPORT CATEGORY
   //====================================
 
@@ -614,12 +664,12 @@ const config = [
     name: 'Periodic Table',
     category: 'Static Data Visual Support',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: PeriodicTableView,
     settings: {
       columns: [],
     },
-    rglRules : {isResizable: false},
+    rglRules: { isResizable: false },
   },
   //------------------------------------------
 
@@ -630,7 +680,7 @@ const config = [
     name: 'Molecule3D',
     category: 'Static Data Visual Support',
     version: 1.0,
-    devStage: "Stable Release",
+    devStage: 'Stable Release',
     component: Molecule3DView,
     settings: {
       options: {
@@ -638,13 +688,12 @@ const config = [
           width: 500,
           height: 400,
         },
-        bkgCol: "#ffffff",
-        txtCol: "#000000",
+        bkgCol: '#ffffff',
+        txtCol: '#000000',
       },
     },
   },
   //------------------------------------------
-
 
   // OTHER CATEGORY
   //===============
