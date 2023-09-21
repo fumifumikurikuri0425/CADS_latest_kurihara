@@ -37,7 +37,7 @@ import { Greys9 } from '@bokeh/bokehjs/build/js/lib/api/palettes';
 var currentDataSource = {};
 
 const defaultOptions = {
-  title: 'Statistics:',
+  title: 'Xenonpy:',
   selectionColor: 'orange',
   nonselectionColor: `#${Greys9[3].toString(16)}`,
   extent: { width: 800, height: 400 },
@@ -59,6 +59,24 @@ function createEmptyChart(options, dataIsEmpty) {
     width: params.extent.width || 800,
   });
   return fig;
+}
+//-------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------
+// Save the csv file to the local computer
+//-------------------------------------------------------------------------------------------------
+function downloadCSV(csvStr, fileName) {
+  const link = document.createElement('a');
+  link.setAttribute(
+    'href',
+    'data:text/csv;charset=utf-8,' + encodeURIComponent(csvStr)
+  );
+  link.setAttribute('target', '_blank');
+  link.setAttribute('download', fileName);
+  link.click();
+  try {
+    document.body.removeChild(link);
+  } catch (error) {}
 }
 //-------------------------------------------------------------------------------------------------
 
@@ -130,6 +148,7 @@ class XenonpyVis extends Component {
     const {
       data,
       options,
+      id,
       colorTags,
       selectedIndices,
       onSelectedIndicesChange,
@@ -137,8 +156,20 @@ class XenonpyVis extends Component {
 
     $(this.rootNode.current).empty();
 
+    var tableDataString = '';
+
     const columns = data && data.columns ? data.columns : [];
     const dataContents = data && data.data ? data.data : [];
+
+    // Custom Download CSV button
+    const viewWrapperCustomButton_DLCSV = $(this.rootNode.current)
+      .parent()
+      .parent()
+      .find('#saveCSVData' + id);
+    viewWrapperCustomButton_DLCSV.off('click');
+    viewWrapperCustomButton_DLCSV.on('click', function () {
+      downloadCSV(tableDataString, 'xenonpy_data.csv');
+    });
 
     let fig = createEmptyChart(options, !(dataContents.length > 0));
     if (dataContents.length > 0) {
@@ -148,6 +179,8 @@ class XenonpyVis extends Component {
         tmpData[v] = df.get(v).to_json({ orient: 'records' });
         return true;
       });
+
+      tableDataString = df.to_csv('xenonpy_data.csv');
 
       const ds = new Bokeh.ColumnDataSource({ data: tmpData });
 

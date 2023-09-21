@@ -19,6 +19,7 @@
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Form } from 'semantic-ui-react';
+import SemanticDropdown from '../FormFields/Dropdown';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
 import Input from '../FormFields/Input';
 
@@ -52,9 +53,43 @@ const XenonpyForm = (props) => {
   const getDropdownOptions = (list) =>
     list.map((i) => ({ key: i, text: i, value: i }));
 
+  //=============================
+  const errors = {};
+  const errorValidate = (value, values, props, fieldName) => {
+    let error = undefined;
+    return error;
+  };
+
+  const methods = ['average', 'weighted average'];
+
+  //input managers
+  const [fieldsAreShowing, toggleVisibleFields] = useState(
+    !initialValues.method != methods[1]
+  );
+
+  const [currentCMVal, setValue] = useState(initialValues.options.colorMap);
+
+  const onCMChange = (event) => {
+    setValue(event);
+  };
+
   // The form itself, as being displayed in the DOM
   return (
     <Form onSubmit={handleSubmit}>
+      <Form.Field>
+        <label> Method: </label>
+        <Field
+          name="method"
+          component={SemanticDropdown}
+          placeholder="Method"
+          options={getDropdownOptions(methods)}
+          onChange={(e, data) => {
+            toggleVisibleFields(data != methods[1]);
+          }}
+        />
+      </Form.Field>
+
+      {/* These Form Fields are for the "mean" method */}
       <Form.Field>
         <label>Feature columns</label>
         <Field

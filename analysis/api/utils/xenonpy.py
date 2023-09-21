@@ -33,36 +33,42 @@ logger = logging.getLogger(__name__)
 
 
 # -------------------------------------------------------------------------------------------------
+def get_catalyst_list(df, coef):
+    cat_array = df.values
+    if coef == 0:
+        cat_delete_array = [cat[~(cat == "none")] for cat in cat_array]
+        cat_join_array = ["".join(cat) for cat in cat_delete_array]
+        return cat_join_array
+
+
+# -------------------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------------------
 def get_xenonpy(data):
-    selected_columns = data["view"]["settings"]["featureColumns"]
-    dataset = data["data"]
+    if data["view"]["settings"]["method"] == "average":
+        selected_columns = data["view"]["settings"]["featureColumns"]
+        dataset = data["data"]
 
-    df = pd.DataFrame(dataset)
-    logger.info(df)
-    df_feature = df[selected_columns]
+        df = pd.DataFrame(dataset)
 
-    catalyst_list = []
-    set_index = []
-    for index, row in df_feature.iterrows():
-        element_row = []
-        for column_name, item in df_feature.items():
-            temp = row[column_name]
-            if temp != "none":
-                element_row.append(temp)
-        if element_row:
-            result = "".join(element_row)
-            catalyst_list.append(result)
-            set_index.append(index)
-    df_notnan = df.loc[set_index]
-    metal = [Composition(comp).as_dict() for comp in catalyst_list]
+        catalyst_list = get_catalyst_list(df, coef=0)
+        metal = [Composition(comp).as_dict() for comp in catalyst_list]
 
-    cal = Compositions()
-    df_descriptor = cal.transform(metal).round(5)
-    df_descriptor["index"] = set_index
-    df_descriptor.set_index("index", inplace=True)
-    final_df = pd.concat([df_notnan, df_descriptor], axis=1)
-    logger.info(final_df)
+        cal = Compositions()
+        df_descriptor = cal.transform(metal).round(5)
+        final_df = pd.concat([df, df_descriptor], axis=1)
+        # logger.info(final_df)
+    # --------------------------------------------------------------------------------------------------
 
+    # --------------------------------------------------------------------------------------------------
+    elif data["view"]["settings"]["method"] == "weighted average":
+        selected_columns = data["view"]["settings"]["featureColumns"]
+        dataset = data["data"]
+
+    # --------------------------------------------------------------------------------------------------
+
+    # --------------------------------------------------------------------------------------------------
     result = {}
     result["columns"] = final_df.columns
     # logger.info(result)

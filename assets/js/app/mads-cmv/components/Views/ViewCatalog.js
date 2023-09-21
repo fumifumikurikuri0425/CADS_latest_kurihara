@@ -214,10 +214,14 @@ const config = [
     category: 'Visualization',
     version: 0.5,
     devStage: 'Beta',
-    component: StatisticsView,
+    component: XenonpyView,
+    customBtns: [
+      { name: 'saveCSVData', icon: 'download', text: 'Download Data as CSV' },
+    ],
     settings: {
-      featureColumns: [],
+      method: 'average',
       options: {
+        featureColumns: [],
         extent: {
           width: 800,
           height: 400,
