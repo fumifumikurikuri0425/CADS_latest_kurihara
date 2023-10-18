@@ -152,11 +152,27 @@ class XenonpyVis extends Component {
       colorTags,
       selectedIndices,
       onSelectedIndicesChange,
+      originalData,
     } = this.props;
 
     $(this.rootNode.current).empty();
 
+    //merged data for saving CSV
     var tableDataString = '';
+    var mergedData = [];
+    if (originalData) {
+      mergedData = [...originalData];
+      for (var i = 0; i < originalData.length; i++) {
+        var nd = data.data[i];
+        if (nd) {
+          for (const [key, value] of Object.entries(nd)) {
+            if (!(key in originalData[i])) {
+              originalData[i][key] = value;
+            }
+          }
+        }
+      }
+    }
 
     const columns = data && data.columns ? data.columns : [];
     const dataContents = data && data.data ? data.data : [];
@@ -180,7 +196,8 @@ class XenonpyVis extends Component {
         return true;
       });
 
-      tableDataString = df.to_csv('xenonpy_data.csv');
+      const df2 = new DataFrame(mergedData);
+      tableDataString = df2.to_csv('xenonpy_data.csv');
 
       const ds = new Bokeh.ColumnDataSource({ data: tmpData });
 

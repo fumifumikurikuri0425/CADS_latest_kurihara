@@ -18,12 +18,45 @@
 //-------------------------------------------------------------------------------------------------
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form } from 'semantic-ui-react';
+import { Form, Grid } from 'semantic-ui-react';
 import SemanticDropdown from '../FormFields/Dropdown';
+import inputTrad from '../FormFields/inputTraditional';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
 import Input from '../FormFields/Input';
 
 //-------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------
+// Form Support Methods that manages various individual form fields that requires some form of
+// attention to its content
+//-------------------------------------------------------------------------------------------------
+
+//=======================
+const setSubmitButtonDisable = (disableState) => {
+  if (disableState) {
+    $('.ui.positive.button').prop('disabled', true);
+  } else {
+    $('.ui.positive.button').prop('disabled', false);
+  }
+};
+//=======================
+
+//=======================
+const validate = (values, props) => {
+  const errors = {};
+  if (values.featureColumns) {
+    console.log(values.featureColumns);
+  }
+
+  if (!values.featureColumns) {
+    errors.featureColumns = 'Required';
+  }
+
+  setSubmitButtonDisable(errors.featureColumns);
+
+  return errors;
+};
+//=======================
 
 //-------------------------------------------------------------------------------------------------
 // The ReduxForm Module for this specific view and Visualisation Component
@@ -38,36 +71,37 @@ const XenonpyForm = (props) => {
     submitting,
     columns,
     targetId,
-    colorTags,
   } = props;
-  const cTags = colorTags.map((c) => ({
-    text: c.color,
-    value: c.id,
-    props: { style: '' },
-  }));
-
-  const [colorDisabled, setColorDisabled] = useState(
-    !initialValues.colorAssignmentEnabled
-  );
 
   const getDropdownOptions = (list) =>
     list.map((i) => ({ key: i, text: i, value: i }));
 
   //=============================
-  const errors = {};
-  const errorValidate = (value, values, props, fieldName) => {
-    let error = undefined;
-    return error;
-  };
-
-  const methods = ['average', 'weighted average'];
+  const methods = ['average', 'weighted average', 'weighted from column'];
 
   //input managers
   const [fieldsAreShowing, toggleVisibleFields] = useState(
-    !initialValues.method != methods[1]
+    !(initialValues.method == methods[1])
   );
+  // const [currentMethodVal, toggleVisibleFields] = useState(
+  //   initialValues.methods
+  // );
 
-  const [currentCMVal, setValue] = useState(initialValues.options.colorMap);
+  if (!initialValues.coefficient1) {
+    initialValues.coefficient1 = 0;
+  }
+  if (!initialValues.coefficient2) {
+    initialValues.coefficient2 = 0;
+  }
+  if (!initialValues.coefficient3) {
+    initialValues.coefficient3 = 0;
+  }
+  if (!initialValues.coefficient4) {
+    initialValues.coefficient4 = 0;
+  }
+  if (!initialValues.coefficient5) {
+    initialValues.coefficient5 = 0;
+  }
 
   const onCMChange = (event) => {
     setValue(event);
@@ -77,19 +111,18 @@ const XenonpyForm = (props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Field>
-        <label> Method: </label>
+        <label>Method</label>
         <Field
           name="method"
           component={SemanticDropdown}
           placeholder="Method"
           options={getDropdownOptions(methods)}
           onChange={(e, data) => {
-            toggleVisibleFields(data != methods[1]);
+            toggleVisibleFields(data != methods[1] && data != methods[2]);
           }}
         />
       </Form.Field>
 
-      {/* These Form Fields are for the "mean" method */}
       <Form.Field>
         <label>Feature columns</label>
         <Field
@@ -97,12 +130,147 @@ const XenonpyForm = (props) => {
           component={MultiSelectDropdown}
           placeholder="Columns"
           search
-          // trigger={<Label color={data.color}/>}
           options={columns}
         />
       </Form.Field>
 
+      {/* These Form Fields are for the "weighted average" method */}
+      {!fieldsAreShowing && (
+        <div>
+          <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <Form.Field>
+                  <label>Coefficient[1]</label>
+                  <Field
+                    name="coefficient1"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Coefficient[2]</label>
+                  <Field
+                    name="coefficient2"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Coefficient[3]</label>
+                  <Field
+                    name="coefficient3"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Coefficient[4]</label>
+                  <Field
+                    name="coefficient4"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Coefficient[5]</label>
+                  <Field
+                    name="coefficient5"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+      )}
+
+      {/* These Form Fields are for the "weighted from colummn" method */}
+      {/* {currentMethodVal == 'weighted from column' && (
+        <div>
+          <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <Form.Field>
+                  <label>Metal1</label>
+                  <Field
+                    name="coefficient1"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Metal2</label>
+                  <Field
+                    name="coefficient2"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Metal3</label>
+                  <Field
+                    name="coefficient3"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Metal4</label>
+                  <Field
+                    name="coefficient4"
+                    component={inputTrad}
+                    placeholder="coefficient"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid> */}
+      {/* </div> */}
+      {/* )} */}
+
       <hr />
+
       <Form.Group widths="equal">
         <label>Extent:</label>
 
@@ -131,5 +299,6 @@ const XenonpyForm = (props) => {
 //-------------------------------------------------------------------------------------------------
 export default reduxForm({
   form: 'xenonpy',
+  validate,
 })(XenonpyForm);
 //-------------------------------------------------------------------------------------------------

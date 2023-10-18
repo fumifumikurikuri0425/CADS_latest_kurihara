@@ -67,7 +67,7 @@ export default class XenonpyView extends withCommandInterface(
     });
 
     newValues = convertExtentValues(newValues);
-
+    newValues.originalData = dataset.main.data;
     actions.sendRequestViewUpdate(view, newValues, data);
   };
 

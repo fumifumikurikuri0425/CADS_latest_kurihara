@@ -211,7 +211,7 @@ const config = [
   {
     type: 'xenonpy',
     name: 'Xenonpy',
-    category: 'Visualization',
+    category: 'Data Processing',
     version: 0.5,
     devStage: 'Beta',
     component: XenonpyView,
