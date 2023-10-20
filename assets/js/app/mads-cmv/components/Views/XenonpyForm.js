@@ -83,9 +83,12 @@ const XenonpyForm = (props) => {
   const [fieldsAreShowing, toggleVisibleFields] = useState(
     !(initialValues.method == methods[1])
   );
-  // const [currentMethodVal, toggleVisibleFields] = useState(
-  //   initialValues.methods
-  // );
+
+  const [currentMethodVal, setValue] = useState(initialValues.method);
+
+  const onMethodChange = (event) => {
+    setValue(event);
+  };
 
   if (!initialValues.coefficient1) {
     initialValues.coefficient1 = 0;
@@ -103,9 +106,118 @@ const XenonpyForm = (props) => {
     initialValues.coefficient5 = 0;
   }
 
-  const onCMChange = (event) => {
-    setValue(event);
-  };
+  const metals = [
+    'None',
+    'H',
+    'He',
+    'Li',
+    'Be',
+    'B',
+    'C',
+    'N',
+    'O',
+    'F',
+    'Ne',
+    'Na',
+    'Mg',
+    'Al',
+    'Si',
+    'P',
+    'S',
+    'Cl',
+    'Ar',
+    'K',
+    'Ca',
+    'Sc',
+    'Ti',
+    'V',
+    'Cr',
+    'Mn',
+    'Fe',
+    'Co',
+    'Ni',
+    'Cu',
+    'Zn',
+    'Ga',
+    'Ge',
+    'As',
+    'Se',
+    'Br',
+    'Kr',
+    'Rb',
+    'Sr',
+    'Y',
+    'Zr',
+    'Nb',
+    'Mo',
+    'Tc',
+    'Ru',
+    'Rh',
+    'Pd',
+    'Ag',
+    'Cd',
+    'In',
+    'Sn',
+    'Sb',
+    'Te',
+    'I',
+    'Xe',
+    'Cs',
+    'Ba',
+    'La',
+    'Ce',
+    'Pr',
+    'Nd',
+    'Pm',
+    'Sm',
+    'Eu',
+    'Gd',
+    'Tb',
+    'Dy',
+    'Ho',
+    'Er',
+    'Tm',
+    'Yb',
+    'Lu',
+    'Hf',
+    'Ta',
+    'W',
+    'Re',
+    'Os',
+    'Ir',
+    'Pt',
+    'Au',
+    'Hg',
+    'Tl',
+    'Pb',
+    'Bi',
+    'Po',
+    'At',
+    'Rn',
+    'Fr',
+    'Ra',
+    'Ac',
+    'Th',
+    'Pa',
+    'U',
+    'Np',
+    'Pu',
+  ];
+  if (!initialValues.metal1) {
+    initialValues.metal1 = 'None';
+  }
+  if (!initialValues.metal2) {
+    initialValues.metal2 = 'None';
+  }
+  if (!initialValues.metal3) {
+    initialValues.metal3 = 'None';
+  }
+  if (!initialValues.metal4) {
+    initialValues.metal4 = 'None';
+  }
+  if (!initialValues.metal5) {
+    initialValues.metal5 = 'None';
+  }
 
   // The form itself, as being displayed in the DOM
   return (
@@ -117,9 +229,7 @@ const XenonpyForm = (props) => {
           component={SemanticDropdown}
           placeholder="Method"
           options={getDropdownOptions(methods)}
-          onChange={(e, data) => {
-            toggleVisibleFields(data != methods[1] && data != methods[2]);
-          }}
+          onChange={onMethodChange}
         />
       </Form.Field>
 
@@ -135,7 +245,7 @@ const XenonpyForm = (props) => {
       </Form.Field>
 
       {/* These Form Fields are for the "weighted average" method */}
-      {!fieldsAreShowing && (
+      {currentMethodVal == 'weighted average' && (
         <div>
           <Grid columns="equal">
             <Grid.Row>
@@ -209,65 +319,73 @@ const XenonpyForm = (props) => {
       )}
 
       {/* These Form Fields are for the "weighted from colummn" method */}
-      {/* {currentMethodVal == 'weighted from column' && (
+      {currentMethodVal == 'weighted from column' && (
         <div>
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal1</label>
+                  <label>Metal[1]</label>
                   <Field
-                    name="coefficient1"
-                    component={inputTrad}
-                    placeholder="coefficient"
-                    type="number"
-                    min={0}
+                    name="metal1"
+                    component={SemanticDropdown}
+                    placeholder="metal"
+                    options={getDropdownOptions(metals)}
                   />
                 </Form.Field>
               </Grid.Column>
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal2</label>
+                  <label>Metal[2]</label>
                   <Field
-                    name="coefficient2"
-                    component={inputTrad}
-                    placeholder="coefficient"
-                    type="number"
-                    min={0}
+                    name="metal2"
+                    component={SemanticDropdown}
+                    placeholder="metal"
+                    options={getDropdownOptions(metals)}
                   />
                 </Form.Field>
               </Grid.Column>
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal3</label>
+                  <label>Metal[3]</label>
                   <Field
-                    name="coefficient3"
-                    component={inputTrad}
-                    placeholder="coefficient"
-                    type="number"
-                    min={0}
+                    name="metal3"
+                    component={SemanticDropdown}
+                    placeholder="metal"
+                    options={getDropdownOptions(metals)}
                   />
                 </Form.Field>
               </Grid.Column>
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal4</label>
+                  <label>Metal[4]</label>
                   <Field
-                    name="coefficient4"
-                    component={inputTrad}
-                    placeholder="coefficient"
-                    type="number"
-                    min={0}
+                    name="metal4"
+                    component={SemanticDropdown}
+                    placeholder="metal"
+                    options={getDropdownOptions(metals)}
+                  />
+                </Form.Field>
+              </Grid.Column>
+
+              <Grid.Column>
+                <Form.Field>
+                  <label>Metal[5]</label>
+                  <Field
+                    name="metal5"
+                    component={SemanticDropdown}
+                    placeholder="metal"
+                    options={getDropdownOptions(metals)}
                   />
                 </Form.Field>
               </Grid.Column>
             </Grid.Row>
-          </Grid> */}
-      {/* </div> */}
-      {/* )} */}
+          </Grid>
+        </div>
+      )}
 
       <hr />
 
