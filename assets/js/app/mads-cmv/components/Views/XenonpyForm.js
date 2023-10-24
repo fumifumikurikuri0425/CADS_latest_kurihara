@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------------------------------------
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form, Grid } from 'semantic-ui-react';
+import { Form, Grid, Popup } from 'semantic-ui-react';
 import SemanticDropdown from '../FormFields/Dropdown';
 import inputTrad from '../FormFields/inputTraditional';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
@@ -224,6 +224,35 @@ const XenonpyForm = (props) => {
     <Form onSubmit={handleSubmit}>
       <Form.Field>
         <label>Method</label>
+        <Popup
+          trigger={
+            <span style={{ fontSize: '20px', color: 'blue' }}>
+              <a
+                className="infohelp"
+                href="https://xenonpy.readthedocs.io/en/latest/index.html"
+                target="_blank"
+              >
+                🛈
+              </a>
+            </span>
+          }
+          size="small"
+          wide="very"
+        >
+          <h4>Xenonpy Info</h4>
+          <p>
+            XenonPy is a Python library that implements a comprehensive set of
+            machine learning tools for materials informatics. This tool can
+            calculate 290 compositional features for a given chemical
+            composition.
+            <br />
+          </p>
+          {/* <img
+            src="https://xenonpy.readthedocs.io/en/latest/_static/logo_readthedocs.png"
+            alt="Xenonpy Logo"
+            style={{ width: '220px' }}
+          /> */}
+        </Popup>
         <Field
           name="method"
           component={SemanticDropdown}
@@ -251,7 +280,18 @@ const XenonpyForm = (props) => {
             <Grid.Row>
               <Grid.Column>
                 <Form.Field>
-                  <label>Coefficient[1]</label>
+                  <label>
+                    Coefficient[1]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Coefficient[1] is linked to the first Feature Column selected."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="coefficient1"
                     component={inputTrad}
@@ -264,7 +304,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Coefficient[2]</label>
+                  <label>
+                    Coefficient[2]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Coefficient[2] is linked to the second Feature Column selected."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="coefficient2"
                     component={inputTrad}
@@ -277,7 +328,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Coefficient[3]</label>
+                  <label>
+                    Coefficient[3]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Coefficient[3] is linked to the third Feature Column selected."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="coefficient3"
                     component={inputTrad}
@@ -290,7 +352,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Coefficient[4]</label>
+                  <label>
+                    Coefficient[4]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Coefficient[4] is linked to the fourth Feature Column selected."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="coefficient4"
                     component={inputTrad}
@@ -303,7 +376,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Coefficient[5]</label>
+                  <label>
+                    Coefficient[5]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Coefficient[5] is linked to the fifth Feature Column selected."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="coefficient5"
                     component={inputTrad}
@@ -325,7 +409,18 @@ const XenonpyForm = (props) => {
             <Grid.Row>
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal[1]</label>
+                  <label>
+                    Metal[1]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Metal[1] is calculated with reference to the first selected column."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="metal1"
                     component={SemanticDropdown}
@@ -337,7 +432,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal[2]</label>
+                  <label>
+                    Metal[2]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Metal[2] is calculated with reference to the second selected column."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="metal2"
                     component={SemanticDropdown}
@@ -349,7 +455,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal[3]</label>
+                  <label>
+                    Metal[3]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Metal[3] is calculated with reference to the third selected column."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="metal3"
                     component={SemanticDropdown}
@@ -361,7 +478,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal[4]</label>
+                  <label>
+                    Metal[4]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Metal[4] is calculated with reference to the fourth selected column."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="metal4"
                     component={SemanticDropdown}
@@ -373,7 +501,18 @@ const XenonpyForm = (props) => {
 
               <Grid.Column>
                 <Form.Field>
-                  <label>Metal[5]</label>
+                  <label>
+                    Metal[5]
+                    <Popup
+                      trigger={
+                        <span style={{ fontSize: '20px', color: 'blue' }}>
+                          🛈
+                        </span>
+                      }
+                      content="Metal[5] is calculated with reference to the fifth selected column."
+                      size="small"
+                    />
+                  </label>
                   <Field
                     name="metal5"
                     component={SemanticDropdown}

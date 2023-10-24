@@ -57,7 +57,23 @@ def get_catalyst_list(df, coef):
 
 
 # -------------------------------------------------------------------------------------------------
+def get_coef_err(columns, num_list):
+    try:
+        logger.info(str(columns) + " : " + str(len(columns)))
+        logger.info(str(num_list) + " : " + str(len(num_list)))
+        assert len(columns) == len(num_list)
+        return False
+    except AssertionError:
+        logger.info("coefficient and Feature Columns are not same length.")
+        return True
+
+
+# -------------------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------------------
 def get_xenonpy(data):
+    result = {}
     if data["view"]["settings"]["method"] == "average":
         selected_columns = data["view"]["settings"]["featureColumns"]
         dataset = data["data"]
@@ -80,8 +96,15 @@ def get_xenonpy(data):
         coef_4 = data["view"]["settings"]["coefficient4"]
         coef_5 = data["view"]["settings"]["coefficient5"]
         coef = [coef_1, coef_2, coef_3, coef_4, coef_5]
+        logger.info(coef)
         coef = [i for i in coef if i != 0]
-        # logger.info(coef)
+        coef = [i for i in coef if i != "0"]
+        is_error = get_coef_err(selected_columns, coef)
+        if is_error:
+            result["status"] = "error"
+            result["detail"] = "coefficient and Feature Columns are not same length."
+            return result
+        logger.info(coef)
 
         dataset = data["data"]
         df = pd.DataFrame(dataset)
@@ -122,7 +145,6 @@ def get_xenonpy(data):
     # --------------------------------------------------------------------------------------------------
 
     # --------------------------------------------------------------------------------------------------
-    result = {}
     result["columns"] = final_df.columns
     # logger.info(result)
     result["data"] = final_df.to_dict(orient="records")
