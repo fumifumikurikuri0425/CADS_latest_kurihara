@@ -80,9 +80,9 @@ const XenonpyForm = (props) => {
   const methods = ['average', 'weighted average', 'weighted from column'];
 
   //input managers
-  const [fieldsAreShowing, toggleVisibleFields] = useState(
-    !(initialValues.method == methods[1])
-  );
+  // const [fieldsAreShowing, toggleVisibleFields] = useState(
+  //   !(initialValues.method == methods[1])
+  // );
 
   const [currentMethodVal, setValue] = useState(initialValues.method);
 
@@ -223,36 +223,46 @@ const XenonpyForm = (props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Field>
-        <label>Method</label>
-        <Popup
-          trigger={
-            <span style={{ fontSize: '20px', color: 'blue' }}>
+        <label>
+          Method&ensp;
+          <Popup
+            trigger={
               <a
                 className="infohelp"
                 href="https://xenonpy.readthedocs.io/en/latest/index.html"
                 target="_blank"
               >
-                🛈
+                {/* Github octicons */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  height="16"
+                  style={{ fill: 'blue' }}
+                >
+                  <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path>
+                </svg>
               </a>
-            </span>
-          }
-          size="small"
-          wide="very"
-        >
-          <h4>Xenonpy Info</h4>
-          <p>
-            XenonPy is a Python library that implements a comprehensive set of
-            machine learning tools for materials informatics. This tool can
-            calculate 290 compositional features for a given chemical
-            composition.
-            <br />
-          </p>
-          {/* <img
-            src="https://xenonpy.readthedocs.io/en/latest/_static/logo_readthedocs.png"
-            alt="Xenonpy Logo"
-            style={{ width: '220px' }}
-          /> */}
-        </Popup>
+            }
+            size="small"
+            wide="very"
+          >
+            <h4>Xenonpy Info</h4>
+            <p>
+              XenonPy is a Python library that implements a comprehensive set of
+              machine learning tools for materials informatics. This tool can
+              calculate 290 compositional features for a given chemical
+              composition.
+              <br />
+            </p>
+            <img
+              src="https://xenonpy.readthedocs.io/en/latest/_static/logo_readthedocs.png"
+              alt="Xenonpy Logo"
+              style={{ width: '220px', backgroundColor: '#2980b9' }}
+            />
+          </Popup>
+        </label>
+
         <Field
           name="method"
           component={SemanticDropdown}
@@ -263,7 +273,53 @@ const XenonpyForm = (props) => {
       </Form.Field>
 
       <Form.Field>
-        <label>Feature columns</label>
+        <label>
+          Feature columns&ensp;
+          <Popup
+            trigger={
+              //semantic ui icon
+              <i
+                className="question circle outline icon"
+                style={{ fontSize: '16px', color: 'blue' }}
+              ></i>
+            }
+            size="small"
+            wide="very"
+          >
+            {currentMethodVal == 'average' && (
+              <p>
+                "average" method allows Feature Columns described by chemical
+                composition, element symbols.
+                <br />
+                e.g. "Li", "Mg", "Ba2Gd6Fe8O24"
+              </p>
+            )}
+            {currentMethodVal == 'weighted average' && (
+              <p>
+                "weighted average" method allows Feature Columns described by
+                chemical composition, element symbols.
+                <br />
+                e.g. "Li", "Mg", "Ba2Gd6Fe8O24"
+                <br />
+                This method calculates weighted average by reference to the
+                values entered in the coefficients.
+              </p>
+            )}
+            {currentMethodVal == 'weighted from column' && (
+              <p>
+                "weighted from column" method allows Feature Columns described
+                by float numbers.
+                <br />
+                This method calculates weighted average by reference to the
+                values entered in the Feature Columns.
+                <br />
+                If you selected beyond the number of Feature Columns, exceeded
+                Metals are ignored.
+              </p>
+            )}
+          </Popup>
+        </label>
+
         <Field
           name="featureColumns"
           component={MultiSelectDropdown}
@@ -284,9 +340,15 @@ const XenonpyForm = (props) => {
                     Coefficient[1]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Coefficient[1] is linked to the first Feature Column selected."
                       size="small"
@@ -308,9 +370,15 @@ const XenonpyForm = (props) => {
                     Coefficient[2]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Coefficient[2] is linked to the second Feature Column selected."
                       size="small"
@@ -332,9 +400,15 @@ const XenonpyForm = (props) => {
                     Coefficient[3]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Coefficient[3] is linked to the third Feature Column selected."
                       size="small"
@@ -356,9 +430,15 @@ const XenonpyForm = (props) => {
                     Coefficient[4]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Coefficient[4] is linked to the fourth Feature Column selected."
                       size="small"
@@ -380,9 +460,15 @@ const XenonpyForm = (props) => {
                     Coefficient[5]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Coefficient[5] is linked to the fifth Feature Column selected."
                       size="small"
@@ -413,9 +499,15 @@ const XenonpyForm = (props) => {
                     Metal[1]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Metal[1] is calculated with reference to the first selected column."
                       size="small"
@@ -436,9 +528,15 @@ const XenonpyForm = (props) => {
                     Metal[2]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Metal[2] is calculated with reference to the second selected column."
                       size="small"
@@ -459,9 +557,15 @@ const XenonpyForm = (props) => {
                     Metal[3]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Metal[3] is calculated with reference to the third selected column."
                       size="small"
@@ -482,9 +586,15 @@ const XenonpyForm = (props) => {
                     Metal[4]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Metal[4] is calculated with reference to the fourth selected column."
                       size="small"
@@ -505,9 +615,15 @@ const XenonpyForm = (props) => {
                     Metal[5]
                     <Popup
                       trigger={
-                        <span style={{ fontSize: '20px', color: 'blue' }}>
-                          🛈
-                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          height="16"
+                          style={{ fill: 'blue' }}
+                        >
+                          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
                       }
                       content="Metal[5] is calculated with reference to the fifth selected column."
                       size="small"
