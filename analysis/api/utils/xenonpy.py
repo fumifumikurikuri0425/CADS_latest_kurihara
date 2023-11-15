@@ -3,7 +3,7 @@
 #          Hokkaido University (2018)
 #          Last Update: Q3 2023
 # ________________________________________________________________________________________________
-# Authors: Mikael Nicander Kuwahara (Lead Developer) [2021-]
+# Authors: Kurihara Fumio [2023-]
 # ________________________________________________________________________________________________
 # Description: Serverside (Django) rest api utils for the 'Analysis' page involving
 #              'statistics' component
@@ -59,8 +59,8 @@ def get_catalyst_list(df, coef):
 # -------------------------------------------------------------------------------------------------
 def get_coef_err(columns, num_list):
     try:
-        logger.info(str(columns) + " : " + str(len(columns)))
-        logger.info(str(num_list) + " : " + str(len(num_list)))
+        # logger.info(str(columns) + " : " + str(len(columns)))
+        # logger.info(str(num_list) + " : " + str(len(num_list)))
         assert len(columns) == len(num_list)
         return False
     except AssertionError:
@@ -74,16 +74,25 @@ def get_coef_err(columns, num_list):
 # -------------------------------------------------------------------------------------------------
 def get_xenonpy(data):
     result = {}
+    featurizers = [
+        "WeightedAverage",
+        "WeightedSum",
+        # "WeightedVariance",
+        # "MaxPooling",
+        # "MinPooling",
+    ]
+    cal = Compositions(featurizers=featurizers)
+    logger.info(data["view"]["settings"]["featurizer_Average"])
+
     if data["view"]["settings"]["method"] == "average":
         selected_columns = data["view"]["settings"]["featureColumns"]
         dataset = data["data"]
         df = pd.DataFrame(dataset)
-        logger.info(df)
-        logger.info(df.dtypes)
+        # logger.info(df)
+        # logger.info(df.dtypes)
 
         catalyst_list = get_catalyst_list(df, coef=False)
         metal = [Composition(comp).as_dict() for comp in catalyst_list]
-        cal = Compositions()
         df_descriptor = cal.transform(metal).round(5)
         final_df = pd.concat([df, df_descriptor], axis=1)
         # logger.info(final_df)
@@ -96,7 +105,7 @@ def get_xenonpy(data):
         coef_4 = data["view"]["settings"]["coefficient4"]
         coef_5 = data["view"]["settings"]["coefficient5"]
         coef = [coef_1, coef_2, coef_3, coef_4, coef_5]
-        logger.info(coef)
+        # logger.info(coef)
         coef = [i for i in coef if i != 0]
         coef = [i for i in coef if i != "0"]
         is_error = get_coef_err(selected_columns, coef)
@@ -104,14 +113,13 @@ def get_xenonpy(data):
             result["status"] = "error"
             result["detail"] = "coefficient and Feature Columns are not same length."
             return result
-        logger.info(coef)
+        # logger.info(coef)
 
         dataset = data["data"]
         df = pd.DataFrame(dataset)
 
         catalyst_list = get_catalyst_list(df, coef)
         metal = [Composition(comp).as_dict() for comp in catalyst_list]
-        cal = Compositions()
         df_descriptor = cal.transform(metal).round(5)
         final_df = pd.concat([df, df_descriptor], axis=1)
 
@@ -124,7 +132,7 @@ def get_xenonpy(data):
         metal_5 = data["view"]["settings"]["metal5"]
         metals = [metal_1, metal_2, metal_3, metal_4, metal_5]
         metals = [m for m in metals if m != "None"]
-        logger.info(metals)
+        # logger.info(metals)
 
         dataset = data["data"]
         weight_df = pd.DataFrame(dataset)
@@ -137,7 +145,6 @@ def get_xenonpy(data):
         catalyst_list = ["".join(cat) for cat in tmp_list]
 
         metal = [Composition(comp).as_dict() for comp in catalyst_list]
-        cal = Compositions()
         df_descriptor = cal.transform(metal).round(5)
         final_df = df_descriptor
         final_df = pd.concat([weight_df, df_descriptor], axis=1)

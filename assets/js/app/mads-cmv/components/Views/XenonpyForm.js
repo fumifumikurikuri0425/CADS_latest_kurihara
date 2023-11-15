@@ -18,7 +18,9 @@
 //-------------------------------------------------------------------------------------------------
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form, Grid, Popup } from 'semantic-ui-react';
+import { Form, Grid, Popup, Button } from 'semantic-ui-react';
+import SemCheckbox from '../FormFields/Checkbox';
+import ToggleButton from '../FormFields/ToggleButton';
 import SemanticDropdown from '../FormFields/Dropdown';
 import inputTrad from '../FormFields/inputTraditional';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
@@ -79,16 +81,15 @@ const XenonpyForm = (props) => {
   //=============================
   const methods = ['average', 'weighted average', 'weighted from column'];
 
-  //input managers
-  // const [fieldsAreShowing, toggleVisibleFields] = useState(
-  //   !(initialValues.method == methods[1])
-  // );
-
   const [currentMethodVal, setValue] = useState(initialValues.method);
 
   const onMethodChange = (event) => {
     setValue(event);
   };
+
+  if (!initialValues.featurizer_Average) {
+    initialValues.featurizer_Average = true;
+  }
 
   if (!initialValues.coefficient1) {
     initialValues.coefficient1 = 0;
@@ -262,13 +263,21 @@ const XenonpyForm = (props) => {
             />
           </Popup>
         </label>
-
         <Field
           name="method"
           component={SemanticDropdown}
           placeholder="Method"
           options={getDropdownOptions(methods)}
           onChange={onMethodChange}
+        />
+      </Form.Field>
+
+      <Form.Field>
+        <Field
+          name="featurizer_Average"
+          component={ToggleButton}
+          label="Average"
+          aria-pressed="false"
         />
       </Form.Field>
 
