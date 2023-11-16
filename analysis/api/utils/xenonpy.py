@@ -74,15 +74,23 @@ def get_coef_err(columns, num_list):
 # -------------------------------------------------------------------------------------------------
 def get_xenonpy(data):
     result = {}
-    featurizers = [
-        "WeightedAverage",
-        "WeightedSum",
-        # "WeightedVariance",
-        # "MaxPooling",
-        # "MinPooling",
-    ]
+    featurizers = []
+    if data["view"]["settings"]["featurizer_Average"]:
+        featurizers.append("WeightedAverage")
+    if data["view"]["settings"]["featurizer_Sum"]:
+        featurizers.append("WeightedSum")
+    if data["view"]["settings"]["featurizer_Variance"]:
+        featurizers.append("WeightedVariance")
+    if data["view"]["settings"]["featurizer_Max"]:
+        featurizers.append("MaxPooling")
+    if data["view"]["settings"]["featurizer_Min"]:
+        featurizers.append("MinPooling")
+    if len(featurizers) == 0:
+        result["status"] = "error"
+        result["detail"] = "Please select at least one calculation method."
+        return result
+    logger.info(featurizers)
     cal = Compositions(featurizers=featurizers)
-    logger.info(data["view"]["settings"]["featurizer_Average"])
 
     if data["view"]["settings"]["method"] == "average":
         selected_columns = data["view"]["settings"]["featureColumns"]
@@ -108,6 +116,7 @@ def get_xenonpy(data):
         # logger.info(coef)
         coef = [i for i in coef if i != 0]
         coef = [i for i in coef if i != "0"]
+        # error message
         is_error = get_coef_err(selected_columns, coef)
         if is_error:
             result["status"] = "error"

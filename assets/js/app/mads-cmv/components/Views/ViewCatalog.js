@@ -212,7 +212,7 @@ const config = [
     type: 'xenonpy',
     name: 'Xenonpy',
     category: 'Data Processing',
-    version: 0.5,
+    version: 0.9,
     devStage: 'Beta',
     component: XenonpyView,
     customBtns: [

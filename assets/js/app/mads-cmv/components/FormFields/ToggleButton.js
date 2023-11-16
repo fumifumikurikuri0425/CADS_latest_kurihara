@@ -38,11 +38,13 @@ const ToggleButton = ({
   <Form.Field>
     <Button
       toggle
+      compact
       {...input}
       {...props}
       onBlur={() => input.onBlur()}
       active={!!input.value}
-      onClick={() => {
+      onClick={(event) => {
+        event.preventDefault();
         input.onChange(!input.value);
       }}
     >

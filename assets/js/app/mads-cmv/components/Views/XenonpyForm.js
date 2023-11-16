@@ -46,16 +46,29 @@ const setSubmitButtonDisable = (disableState) => {
 //=======================
 const validate = (values, props) => {
   const errors = {};
-  if (values.featureColumns) {
-    console.log(values.featureColumns);
-  }
 
+  console.log(
+    values.featurizer_Average,
+    values.featurizer_Sum,
+    values.featurizer_Variance,
+    values.featurizer_Max,
+    values.featurizer_Min
+  );
+
+  if (
+    !values.featurizer_Average &&
+    !values.featurizer_Sum &&
+    !values.featurizer_Variance &&
+    !values.featurizer_Max &&
+    !values.featurizer_Min
+  ) {
+    errors.featurizer_Average = 'Required';
+  }
   if (!values.featureColumns) {
     errors.featureColumns = 'Required';
   }
-
+  setSubmitButtonDisable(errors.featurizer_Average);
   setSubmitButtonDisable(errors.featureColumns);
-
   return errors;
 };
 //=======================
@@ -89,6 +102,18 @@ const XenonpyForm = (props) => {
 
   if (!initialValues.featurizer_Average) {
     initialValues.featurizer_Average = true;
+  }
+  if (!initialValues.featurizer_Sum) {
+    initialValues.featurizer_Sum = true;
+  }
+  if (!initialValues.featurizer_Variance) {
+    initialValues.featurizer_Variance = true;
+  }
+  if (!initialValues.featurizer_Max) {
+    initialValues.featurizer_Max = true;
+  }
+  if (!initialValues.featurizer_Min) {
+    initialValues.featurizer_Min = true;
   }
 
   if (!initialValues.coefficient1) {
@@ -272,14 +297,52 @@ const XenonpyForm = (props) => {
         />
       </Form.Field>
 
-      <Form.Field>
-        <Field
-          name="featurizer_Average"
-          component={ToggleButton}
-          label="Average"
-          aria-pressed="false"
-        />
-      </Form.Field>
+      <div>
+        <Form.Field>
+          <Field
+            name="featurizer_Average"
+            component={ToggleButton}
+            label="Average"
+            aria-pressed="false"
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <Field
+            name="featurizer_Sum"
+            component={ToggleButton}
+            label="Sum"
+            aria-pressed="false"
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <Field
+            name="featurizer_Variance"
+            component={ToggleButton}
+            label="Variance"
+            aria-pressed="false"
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <Field
+            name="featurizer_Max"
+            component={ToggleButton}
+            label="Max"
+            aria-pressed="false"
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <Field
+            name="featurizer_Min"
+            component={ToggleButton}
+            label="Min"
+            aria-pressed="false"
+          />
+        </Form.Field>
+      </div>
 
       <Form.Field>
         <label>
