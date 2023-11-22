@@ -157,10 +157,11 @@ class XenonpyVis extends Component {
 
     $(this.rootNode.current).empty();
 
-    //merged data for saving CSV
+    // merged data for saving CSV
     var tableDataString = '';
     var mergedData = [];
     if (originalData) {
+      // console.log(originalData);
       mergedData = [...originalData];
       for (var i = 0; i < originalData.length; i++) {
         var nd = data.data[i];
@@ -189,17 +190,43 @@ class XenonpyVis extends Component {
 
     let fig = createEmptyChart(options, !(dataContents.length > 0));
     if (dataContents.length > 0) {
+      let is_json = (data) => {
+        try {
+          JSON.parse(data);
+        } catch (error) {
+          return false;
+        }
+        return true;
+      };
+      console.log(is_json(data.data));
+      console.log(is_json(originalData));
+
       const df = new DataFrame(data.data);
+      // console.log(df.columns.toString());
+
       const tmpData = {};
       df.columns.toArray().map((v) => {
         tmpData[v] = df.get(v).to_json({ orient: 'records' });
         return true;
       });
+      // console.log(tmpData);
 
+      const df_merge = new DataFrame(originalData);
+      // console.log(df_merge.columns.toString());
+      const tmpData2 = {};
+      df_merge.columns.toArray().map((v) => {
+        tmpData2[v] = df_merge.get(v).to_json({ orient: 'records' });
+        return true;
+      });
+      // console.log(tmpData2);
+
+      // console.log(mergedData);
       const df2 = new DataFrame(mergedData);
       tableDataString = df2.to_csv('xenonpy_data.csv');
+      // console.log(tableDataString);
 
       const ds = new Bokeh.ColumnDataSource({ data: tmpData });
+      // console.log(ds);
 
       const displayColumns = columns.map((v) => {
         const c = new Bokeh.Tables.TableColumn({
@@ -208,6 +235,7 @@ class XenonpyVis extends Component {
         });
         return c;
       });
+
       const params = Object.assign({}, defaultOptions, options);
       fig = new Bokeh.Tables.DataTable({
         source: ds,

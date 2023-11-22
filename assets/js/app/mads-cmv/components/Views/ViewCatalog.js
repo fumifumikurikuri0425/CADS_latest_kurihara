@@ -28,10 +28,10 @@ import PieView from './Pie';
 import Scatter3DView from './Scatter3D';
 import GapMinderView from './GapMinder';
 import LineView from './Line';
-import XenonpyView from './XenonpyView';
 
 // Data Processing
 import ImageViewView from './ImageView';
+import XenonpyView from './XenonpyView';
 
 // Analysis
 import ParCoordsView from './ParCoordsView';
@@ -212,8 +212,8 @@ const config = [
     type: 'xenonpy',
     name: 'Xenonpy',
     category: 'Data Processing',
-    version: 0.9,
-    devStage: 'Beta',
+    version: 1.0,
+    devStage: 'Stable Release',
     component: XenonpyView,
     customBtns: [
       { name: 'saveCSVData', icon: 'download', text: 'Download Data as CSV' },

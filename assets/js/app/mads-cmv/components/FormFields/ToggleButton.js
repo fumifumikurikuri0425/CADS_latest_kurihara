@@ -7,10 +7,10 @@
 //          Jun Fujima (Former Lead Developer) [2018-2021]
 // ________________________________________________________________________________________________
 // Description: This is a 'Form Field' React Component (used in data editing/displaying forms)
-//              of the 'CheckBox' type
+//              of the 'Button' type
 // ------------------------------------------------------------------------------------------------
 // Notes: 'Form Fields' are component used inside all forms for editing and viewing connected data.
-//        'CheckBox' is of classic type, look and feel.
+//        'Button' is of classic type, look and feel.
 // ------------------------------------------------------------------------------------------------
 // References: React, prop-types & semantic-ui-react Libs
 =================================================================================================*/
@@ -32,6 +32,7 @@ const ToggleButton = ({
   type,
   label,
   placeholder,
+  state,
   meta: { touched, error, warning },
   ...props
 }) => (
@@ -46,6 +47,7 @@ const ToggleButton = ({
       onClick={(event) => {
         event.preventDefault();
         input.onChange(!input.value);
+        state;
       }}
     >
       {label}

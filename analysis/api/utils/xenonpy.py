@@ -8,7 +8,7 @@
 # Description: Serverside (Django) rest api utils for the 'Analysis' page involving
 #              'statistics' component
 # ------------------------------------------------------------------------------------------------
-# Notes:  This is one of the REST API parts of the 'analysis' interface of the website that
+# Notes:  This is one of the REST API parts of the 'Data Processing' interface of the website that
 #         allows serverside work for the 'statistics' component.
 # ------------------------------------------------------------------------------------------------
 # References: logging, numpy libs
@@ -85,6 +85,7 @@ def get_xenonpy(data):
         featurizers.append("MaxPooling")
     if data["view"]["settings"]["featurizer_Min"]:
         featurizers.append("MinPooling")
+    logger.info(featurizers)
     if len(featurizers) == 0:
         result["status"] = "error"
         result["detail"] = "Please select at least one calculation method."

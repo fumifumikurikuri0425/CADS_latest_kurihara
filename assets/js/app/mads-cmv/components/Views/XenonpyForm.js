@@ -25,6 +25,7 @@ import SemanticDropdown from '../FormFields/Dropdown';
 import inputTrad from '../FormFields/inputTraditional';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
 import Input from '../FormFields/Input';
+import { values } from 'lodash';
 
 //-------------------------------------------------------------------------------------------------
 
@@ -47,14 +48,6 @@ const setSubmitButtonDisable = (disableState) => {
 const validate = (values, props) => {
   const errors = {};
 
-  console.log(
-    values.featurizer_Average,
-    values.featurizer_Sum,
-    values.featurizer_Variance,
-    values.featurizer_Max,
-    values.featurizer_Min
-  );
-
   if (
     !values.featurizer_Average &&
     !values.featurizer_Sum &&
@@ -62,12 +55,13 @@ const validate = (values, props) => {
     !values.featurizer_Max &&
     !values.featurizer_Min
   ) {
-    errors.featurizer_Average = 'Required';
+    errors.featurizer_Min = 'Required';
   }
+  setSubmitButtonDisable(errors.featurizer_Min);
+
   if (!values.featureColumns) {
     errors.featureColumns = 'Required';
   }
-  setSubmitButtonDisable(errors.featurizer_Average);
   setSubmitButtonDisable(errors.featureColumns);
   return errors;
 };
@@ -100,19 +94,19 @@ const XenonpyForm = (props) => {
     setValue(event);
   };
 
-  if (!initialValues.featurizer_Average) {
+  if (initialValues.featurizer_Average == undefined) {
     initialValues.featurizer_Average = true;
   }
-  if (!initialValues.featurizer_Sum) {
+  if (initialValues.featurizer_Sum == undefined) {
     initialValues.featurizer_Sum = true;
   }
-  if (!initialValues.featurizer_Variance) {
+  if (initialValues.featurizer_Variance == undefined) {
     initialValues.featurizer_Variance = true;
   }
-  if (!initialValues.featurizer_Max) {
+  if (initialValues.featurizer_Max == undefined) {
     initialValues.featurizer_Max = true;
   }
-  if (!initialValues.featurizer_Min) {
+  if (initialValues.featurizer_Min == undefined) {
     initialValues.featurizer_Min = true;
   }
 
@@ -297,13 +291,12 @@ const XenonpyForm = (props) => {
         />
       </Form.Field>
 
-      <div>
+      <div className="ui buttons">
         <Form.Field>
           <Field
             name="featurizer_Average"
             component={ToggleButton}
             label="Average"
-            aria-pressed="false"
           />
         </Form.Field>
 
