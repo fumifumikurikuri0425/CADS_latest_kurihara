@@ -4,11 +4,10 @@
 //          Last Update: Q3 2023
 // ________________________________________________________________________________________________
 // Authors: Mikael Nicander Kuwahara (Lead Developer) [2021-]
-//          Jun Fujima (Former Lead Developer) [2018-2021]
 // ________________________________________________________________________________________________
-// Description: This is the Settings Configuration Form for the 'Hist' View, driven by ReduxForm
+// Description: This is the Settings Configuration Form for the 'Statistics' View, driven by ReduxForm
 // ------------------------------------------------------------------------------------------------
-// Notes: 'HistForm' opens a customized form for the 'Hist' visualization component and allows
+// Notes: 'StatisticsForm' opens a customized form for the 'Statistics' visualization component and allows
 //        the user to edit its look, feel and behavior in multiple ways.
 // ------------------------------------------------------------------------------------------------
 // References: React, ReduxForm and semantic-view-ui libs, Needed FormField components
@@ -20,17 +19,43 @@
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Form } from 'semantic-ui-react';
-
-import Input from '../FormFields/Input';
+import SemCheckbox from '../FormFields/Checkbox';
 import MultiSelectDropdown from '../FormFields/MultiSelectDropdown';
-import ToggleButton from '../FormFields/ToggleButton';
+import Input from '../FormFields/Input';
 
 //-------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------
+// Form Support Methods that manages various individual form fields that requires some form of
+// attention to its content
+//-------------------------------------------------------------------------------------------------
+
+//=======================
+const setSubmitButtonDisable = (disableState) => {
+  if (disableState) {
+    $('.ui.positive.button').prop('disabled', true);
+  } else {
+    $('.ui.positive.button').prop('disabled', false);
+  }
+};
+//=======================
+
+//=======================
+const validate = (values, props) => {
+  const errors = {};
+
+  if (!values.featureColumns) {
+    errors.featureColumns = 'Required';
+  }
+  setSubmitButtonDisable(errors.featureColumns);
+  return errors;
+};
+//=======================
 
 //-------------------------------------------------------------------------------------------------
 // The ReduxForm Module for this specific view and Visualisation Component
 //-------------------------------------------------------------------------------------------------
-const HistForm = (props) => {
+const OnehotForm = (props) => {
   // parameters and such
   const {
     handleSubmit,
@@ -40,44 +65,22 @@ const HistForm = (props) => {
     submitting,
     columns,
     targetId,
-    colorTags,
   } = props;
-  const cTags = colorTags.map((c) => ({
-    text: c.color,
-    value: c.id,
-    props: { style: '' },
-  }));
 
-  // input managers
-  const [colorDisabled, setColorDisabled] = useState(
-    !initialValues.colorAssignmentEnabled
-  );
+  const getDropdownOptions = (list) =>
+    list.map((i) => ({ key: i, text: i, value: i }));
 
-  if (initialValues.targetColumns && initialValues.targetColumns.length > 0) {
-    var hitCounter = 0;
-    for (var i = 0; i < initialValues.targetColumns.length; i++) {
-      hitCounter += columns.some(
-        (e) => e.value === initialValues.targetColumns[i]
-      )
-        ? 1
-        : 0;
-    }
-    if (hitCounter != initialValues.targetColumns.length) {
-      initialValues.targetColumns = [];
-    }
-  }
-
-  if (initialValues.skewness == undefined) {
-    initialValues.skewness = false;
+  if (initialValues.drop_First == undefined) {
+    initialValues.drop_First = false;
   }
 
   // The form itself, as being displayed in the DOM
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Field>
-        <label>Target columns</label>
+        <label>Feature columns</label>
         <Field
-          name="targetColumns"
+          name="featureColumns"
           component={MultiSelectDropdown}
           placeholder="Columns"
           search
@@ -86,18 +89,8 @@ const HistForm = (props) => {
       </Form.Field>
 
       <Form.Field>
-        <Field name="skewness" component={ToggleButton} label="Skewness" />
-      </Form.Field>
-
-      <Form.Field>
-        <label>Number of bins</label>
-        <Field
-          name="bins"
-          component="input"
-          type="number"
-          placeholder="bins"
-          parse={(value) => Number(value)}
-        />
+        <label>Drop first category</label>
+        <Field name="dropFirst" component={SemCheckbox} toggle />
       </Form.Field>
 
       <hr />
@@ -109,12 +102,14 @@ const HistForm = (props) => {
           name="options.extent.width"
           component={Input}
           placeholder="Width"
+          // parse={(value) => Number(value)}
         />
         <Field
           fluid
           name="options.extent.height"
           component={Input}
           placeholder="Height"
+          // parse={(value) => Number(value)}
         />
       </Form.Group>
     </Form>
@@ -126,6 +121,7 @@ const HistForm = (props) => {
 // Exporting and sharing this ReduxForm Module
 //-------------------------------------------------------------------------------------------------
 export default reduxForm({
-  form: 'Scatter',
-})(HistForm);
+  form: 'onehot_encoding',
+  validate,
+})(OnehotForm);
 //-------------------------------------------------------------------------------------------------

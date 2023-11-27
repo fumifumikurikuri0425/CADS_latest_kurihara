@@ -32,7 +32,6 @@ const Category10_10 = Category10.Category10_10;
 
 //-------------------------------------------------------------------------------------------------
 
-
 //-------------------------------------------------------------------------------------------------
 // Default Options / Settings
 //-------------------------------------------------------------------------------------------------
@@ -43,7 +42,6 @@ const defaultOptions = {
   extent: { width: 300, height: 300 },
 };
 //-------------------------------------------------------------------------------------------------
-
 
 //-------------------------------------------------------------------------------------------------
 // Creates an empty basic default Visualization Component of the specific type
@@ -67,7 +65,6 @@ function createEmptyChart(options, dataIsEmpty) {
 
   return fig;
 }
-
 
 //-------------------------------------------------------------------------------------------------
 // This Visualization Component Class
@@ -106,7 +103,7 @@ export default class QuadBarChart extends Component {
         v.remove();
       }
     }
-    if(this.props.data.resetRequest){
+    if (this.props.data.resetRequest) {
       delete this.props.options.x_range;
       delete this.props.options.y_range;
       delete this.props.data.resetRequest;
@@ -118,13 +115,8 @@ export default class QuadBarChart extends Component {
 
   // Create the VizComp based on the incomming parameters
   async createChart() {
-    const {
-      data,
-      mappings,
-      options,
-      colorTags,
-      onSelectedIndicesChange,
-    } = this.props;
+    const { data, mappings, options, colorTags, onSelectedIndicesChange } =
+      this.props;
 
     const { n, bins } = mappings;
     const color = `#${Category10_10[0].toString(16)}`;
@@ -132,19 +124,20 @@ export default class QuadBarChart extends Component {
     const params = { ...defaultOptions, ...options };
     let plt = Bokeh.Plotting;
     const columns = data.columns;
+    const skewness = data.skewness;
     const dataContents = data.data;
     let views = null;
     var p = null;
-    let title ="";
+    let title = '';
 
     if (dataContents && Object.keys(dataContents).length > 0) {
       let array = new Array(Object.keys(dataContents).length);
 
       Object.keys(dataContents).map((index) => {
-        if(index==0){
-          title="Histogram";
-        }else{
-          title="";
+        if (index == 0) {
+          title = 'Histogram';
+        } else {
+          title = '';
         }
         if (n && dataContents[index][n] && bins && dataContents[index][bins]) {
           const hhist = dataContents[index][n];
@@ -177,8 +170,7 @@ export default class QuadBarChart extends Component {
               let indices;
               if (ds.selected.indices.length > 0) {
                 indices = dataContents[index].indices[ds.selected.indices];
-              }
-              else {
+              } else {
                 indices = [];
               }
 
@@ -192,16 +184,33 @@ export default class QuadBarChart extends Component {
           }
 
           const tools = 'pan,crosshair,tap,reset,save,hover';
-          p = plt.figure({
-            title: title,
-            tools,
-            y_axis_label: "Number of data",
-            x_axis_label: this.props.targetColumns[index],
-            x_minor_ticks: 2,
-            y_minor_ticks: 2,
-            width: params.extent.width || 250,
-            height: params.extent.height || 250,
-          });
+          if (!!skewness) {
+            p = plt.figure({
+              title: title,
+              tools,
+              y_axis_label: 'Number of data',
+              x_axis_label:
+                this.props.targetColumns[index] +
+                '\n' +
+                'Skewness: ' +
+                skewness[index],
+              x_minor_ticks: 2,
+              y_minor_ticks: 2,
+              width: params.extent.width || 250,
+              height: params.extent.height || 250,
+            });
+          } else {
+            p = plt.figure({
+              title: title,
+              tools,
+              y_axis_label: 'Number of data',
+              x_axis_label: this.props.targetColumns[index],
+              x_minor_ticks: 2,
+              y_minor_ticks: 2,
+              width: params.extent.width || 250,
+              height: params.extent.height || 250,
+            });
+          }
 
           p.quad({
             bottom: 0,
@@ -218,16 +227,20 @@ export default class QuadBarChart extends Component {
       });
 
       const newArr = [];
-      while (array.length) newArr.push(array.splice(0, Math.ceil(Math.sqrt(columns.length))));
+      while (array.length)
+        newArr.push(array.splice(0, Math.ceil(Math.sqrt(columns.length))));
       let null_count = null;
-      null_count = (newArr.length * Math.ceil(Math.sqrt(columns.length))) - columns.length;
+      null_count =
+        newArr.length * Math.ceil(Math.sqrt(columns.length)) - columns.length;
       for (let i = 0; i < null_count; i++) {
-        newArr[newArr.length-1].push(null);
+        newArr[newArr.length - 1].push(null);
       }
 
-      views = await plt.show(plt.gridplot(newArr, {title: 'Histogram Quad Bar chart'}), this.rootNode.current);
-    }
-    else {
+      views = await plt.show(
+        plt.gridplot(newArr, { title: 'Histogram Quad Bar chart' }),
+        this.rootNode.current
+      );
+    } else {
       const fig = createEmptyChart(options, true);
       views = await plt.show(fig, this.rootNode.current);
     }
@@ -244,7 +257,6 @@ export default class QuadBarChart extends Component {
   }
 }
 //-------------------------------------------------------------------------------------------------
-
 
 //-------------------------------------------------------------------------------------------------
 // This Visualization Component's Allowed and expected Property Types
@@ -275,7 +287,6 @@ QuadBarChart.propTypes = {
   onSelectedIndicesChange: PropTypes.func,
 };
 //-------------------------------------------------------------------------------------------------
-
 
 //-------------------------------------------------------------------------------------------------
 // This Visualization Component's default initial start Property Values

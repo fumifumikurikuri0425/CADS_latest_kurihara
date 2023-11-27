@@ -1,4 +1,4 @@
-#=================================================================================================
+# =================================================================================================
 # Project: CADS/MADS - An Integrated Web-based Visual Platform for Materials Informatics
 #          Hokkaido University (2018)
 #          Last Update: Q3 2023
@@ -13,26 +13,27 @@
 #         allows serverside work for the 'histogram' component.
 # ------------------------------------------------------------------------------------------------
 # References: logging, numpy libs
-#=================================================================================================
+# =================================================================================================
 
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # Import required Libraries
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 import logging
 import numpy as np
 import pandas as pd
+from scipy.stats import gaussian_kde
 
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 
 
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 def get_histogram(data):
     # logger.info(data)
     dummy_value = 999999999999
-    x = data['data']
-    bins = data['view']['settings']['bins']
+    x = data["data"]
+    bins = data["view"]["settings"]["bins"]
 
     x_df = pd.DataFrame(x, dtype="float64")
     x_dropna = x_df.dropna()
@@ -40,11 +41,14 @@ def get_histogram(data):
     hist, bin_edges = np.histogram(x_dropna.values, bins=bins)
 
     result = {}
-    result['hist'] = hist
-    result['binEdges'] = bin_edges
+    result["hist"] = hist
+    result["binEdges"] = bin_edges
 
     x_replace_na = x_df.fillna(dummy_value)
     x_array = x_replace_na.values
+    # kde = gaussian_kde(x_array)
+    # logger.info(x_array)
+
     indices = []
 
     l = len(bin_edges)
@@ -60,30 +64,41 @@ def get_histogram(data):
             ids = list(np.where((left <= x_array) & (x_array < right))[0])
         indices.append(ids)
 
-    result['indices'] = indices
+    result["indices"] = indices
 
     return result
-#-------------------------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------------------
 def get_histograms(data):
     selected_columns = data["view"]["settings"]["targetColumns"]
     dataset = data["data"]
-    df = pd.DataFrame(dataset , dtype="float64")
+    df = pd.DataFrame(dataset, dtype="float64")
     df = df[selected_columns]
-    result = {"data":{}}
+    result = {"data": {}}
     count = 0
     for i in selected_columns:
         for j in selected_columns:
             if i == j:
                 t_df = df[i].dropna()
-                target_data = {"view":{"settings":{}}}
+                target_data = {"view": {"settings": {}}}
                 target_data["data"] = df[i]
-                target_data["view"]["settings"]["bins"] = data["view"]["settings"]["bins"]
+                target_data["view"]["settings"]["bins"] = data["view"]["settings"][
+                    "bins"
+                ]
                 result["data"][count] = get_histogram(target_data)
                 # logger.info(result["data"][count])
                 count += 1
     result["columns"] = selected_columns
+    if data["view"]["settings"]["skewness"]:
+        skewness = df.skew().round(7)
+        result["skewness"] = skewness
+        # logger.info(result)
 
     return result
-#-------------------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------------------

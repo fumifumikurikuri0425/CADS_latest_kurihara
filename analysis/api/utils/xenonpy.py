@@ -85,7 +85,7 @@ def get_xenonpy(data):
         featurizers.append("MaxPooling")
     if data["view"]["settings"]["featurizer_Min"]:
         featurizers.append("MinPooling")
-    logger.info(featurizers)
+    # logger.info(featurizers)
     if len(featurizers) == 0:
         result["status"] = "error"
         result["detail"] = "Please select at least one calculation method."

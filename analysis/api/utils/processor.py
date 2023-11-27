@@ -35,6 +35,7 @@ from .scikit_image_manip import get_scikit_image_manip
 from .node_graph import get_node_graph
 from .gaussian_process import get_gaussian_process
 from .xenonpy import get_xenonpy
+from .onehot_encoding import get_onehot
 
 
 import logging
@@ -62,6 +63,7 @@ processor_map = {
     "nodeGraph": get_node_graph,
     "gaussianProcess": get_gaussian_process,
     "xenonpy": get_xenonpy,
+    "onehot_encoding": get_onehot,
 }
 
 

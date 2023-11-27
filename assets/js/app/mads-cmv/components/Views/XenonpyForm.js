@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------------------------------------
 import React, { useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form, Grid, Popup, Button } from 'semantic-ui-react';
+import { Form, Grid, Popup } from 'semantic-ui-react';
 import SemCheckbox from '../FormFields/Checkbox';
 import ToggleButton from '../FormFields/ToggleButton';
 import SemanticDropdown from '../FormFields/Dropdown';
@@ -48,16 +48,17 @@ const setSubmitButtonDisable = (disableState) => {
 const validate = (values, props) => {
   const errors = {};
 
-  if (
-    !values.featurizer_Average &&
-    !values.featurizer_Sum &&
-    !values.featurizer_Variance &&
-    !values.featurizer_Max &&
-    !values.featurizer_Min
-  ) {
-    errors.featurizer_Min = 'Required';
-  }
-  setSubmitButtonDisable(errors.featurizer_Min);
+  // if (
+  //   values.featurizer_Average == false &&
+  //   values.featurizer_Sum == false &&
+  //   values.featurizer_Variance == false &&
+  //   values.featurizer_Max == false &&
+  //   values.featurizer_Min == false
+  // ) {
+  //   console.log('All false!!!');
+  //   errors.featurizer_Min == 'Required';
+  // }
+  // setSubmitButtonDisable(errors.featurizer_Min);
 
   if (!values.featureColumns) {
     errors.featureColumns = 'Required';

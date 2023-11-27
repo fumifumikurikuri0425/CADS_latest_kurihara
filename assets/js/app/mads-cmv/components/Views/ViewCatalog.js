@@ -32,6 +32,7 @@ import LineView from './Line';
 // Data Processing
 import ImageViewView from './ImageView';
 import XenonpyView from './XenonpyView';
+import OnehotView from './OnehotView';
 
 // Analysis
 import ParCoordsView from './ParCoordsView';
@@ -207,7 +208,7 @@ const config = [
   //------------------------------------------
 
   // Xenonpy - A Customizable Xenonpy View
-  //-----------------------------------------------
+  //------------------------------------------
   {
     type: 'xenonpy',
     name: 'Xenonpy',
@@ -229,6 +230,31 @@ const config = [
       },
     },
   },
+  //------------------------------------------
+
+  // Onehot View - A Customizable One Hot Encoding View
+  //------------------------------------------
+  {
+    type: 'onehot_encoding',
+    name: 'OneHot Encoding',
+    category: 'Data Processing',
+    version: 0.1,
+    devStage: 'Beta',
+    component: OnehotView,
+    customBtns: [
+      { name: 'saveCSVData', icon: 'download', text: 'Download Data as CSV' },
+    ],
+    settings: {
+      options: {
+        featureColumns: [],
+        extent: {
+          width: 800,
+          height: 400,
+        },
+      },
+    },
+  },
+  //------------------------------------------
 
   // GapMinder - A Hans Rosling Inspiration
   // COMMENTED OUT SINCE IT IS NOT YET FINISHED AT ALL

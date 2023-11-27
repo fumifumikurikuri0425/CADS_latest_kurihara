@@ -37,7 +37,7 @@ import { Greys9 } from '@bokeh/bokehjs/build/js/lib/api/palettes';
 var currentDataSource = {};
 
 const defaultOptions = {
-  title: 'Xenonpy:',
+  title: 'Onehot:',
   selectionColor: 'orange',
   nonselectionColor: `#${Greys9[3].toString(16)}`,
   extent: { width: 800, height: 400 },
@@ -83,7 +83,7 @@ function downloadCSV(csvStr, fileName) {
 //-------------------------------------------------------------------------------------------------
 // This Visualization Component Class
 //-------------------------------------------------------------------------------------------------
-class XenonpyVis extends Component {
+class OnehotVis extends Component {
   // Initiation of the VizComp
   constructor(props) {
     super(props);
@@ -161,6 +161,7 @@ class XenonpyVis extends Component {
     var tableDataString = '';
     var mergedData = [];
     if (originalData) {
+      // console.log(originalData);
       mergedData = [...originalData];
       for (var i = 0; i < originalData.length; i++) {
         var nd = data.data[i];
@@ -184,37 +185,22 @@ class XenonpyVis extends Component {
       .find('#saveCSVData' + id);
     viewWrapperCustomButton_DLCSV.off('click');
     viewWrapperCustomButton_DLCSV.on('click', function () {
-      downloadCSV(tableDataString, 'xenonpy_data.csv');
+      downloadCSV(tableDataString, 'onehot_encoding.csv');
     });
 
     let fig = createEmptyChart(options, !(dataContents.length > 0));
     if (dataContents.length > 0) {
       const df = new DataFrame(data.data);
-      // console.log(df.columns.toString());
-
       const tmpData = {};
       df.columns.toArray().map((v) => {
         tmpData[v] = df.get(v).to_json({ orient: 'records' });
         return true;
       });
-      // console.log(tmpData);
 
-      const df_merge = new DataFrame(originalData);
-      // console.log(df_merge.columns.toString());
-      const tmpData2 = {};
-      df_merge.columns.toArray().map((v) => {
-        tmpData2[v] = df_merge.get(v).to_json({ orient: 'records' });
-        return true;
-      });
-      // console.log(tmpData2);
-
-      // console.log(mergedData);
       const df2 = new DataFrame(mergedData);
-      tableDataString = df2.to_csv('xenonpy_data.csv');
-      // console.log(tableDataString);
+      tableDataString = df2.to_csv('onehot_encoding.csv');
 
       const ds = new Bokeh.ColumnDataSource({ data: tmpData });
-      // console.log(ds);
 
       const displayColumns = columns.map((v) => {
         const c = new Bokeh.Tables.TableColumn({
@@ -223,7 +209,6 @@ class XenonpyVis extends Component {
         });
         return c;
       });
-
       const params = Object.assign({}, defaultOptions, options);
       fig = new Bokeh.Tables.DataTable({
         source: ds,
@@ -246,4 +231,4 @@ class XenonpyVis extends Component {
 }
 //-------------------------------------------------------------------------------------------------
 
-export default XenonpyVis;
+export default OnehotVis;
